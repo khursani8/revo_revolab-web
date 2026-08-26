@@ -1,0 +1,44 @@
+{
+  "name": "@revolab/revolab-web",
+  "version": "0.1.0",
+  "description": "RevolabWeb Edge \u2014 browser-native neural Malay text-to-speech, WebAssembly, no server. Three 1.39M-parameter Revolab voices (angellyn, sarah, paan) distilled from production speakers.",
+  "license": "GPL-3.0-or-later",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "voices"
+  ],
+  "sideEffects": false,
+  "keywords": [
+    "tts",
+    "text-to-speech",
+    "malay",
+    "bahasa",
+    "wasm",
+    "webassembly",
+    "speech-synthesis",
+    "espeak",
+    "offline",
+    "edge"
+  ],
+  "homepage": "https://github.com/khursanirevo/revolab-web#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/khursanirevo/revolab-web.git"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {},
+  "publishConfig": {
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/khursanirevo/revolab-web/issues"
+  }
+}

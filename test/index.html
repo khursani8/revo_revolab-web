@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>revolab-web smoke test</title>
+</head>
+<body>
+<h1>revolab-web smoke test</h1>
+<p id="status">running…</p>
+<script type="module">
+  // Imports the package SOURCE (not dist/) so the test exercises exactly
+  // what ships in src/index.js. Served from the repo root via
+  // `python3 -m http.server` so this resolves against the sibling
+  // ../voices/ directory (self-hosted assets) — proves the
+  // assetBase/voiceBase override path works.
+  import { RevolabWeb, playAudio, KNOWN_VOICES } from '../src/index.js';
+
+  const statusEl = document.getElementById('status');
+  const ASSET_BASE = '../dist/';     // npmpkg/test/ -> npmpkg/dist/
+
+  async function run() {
+    const tts = await RevolabWeb.load({ assetBase: ASSET_BASE });
+    const results = {};
+    for (const v of KNOWN_VOICES) {
+      const r = await tts.synthesize('Selamat pagi! Saya suara Revolab dalam pelayar anda.', {
+        voice: v.key,
+        voiceBase: '../',           // npmpkg/test/ -> npmpkg/voices/<key>/
+      });
+      results[v.key] = {
+        ok: r.samples instanceof Float32Array
+          && r.samples.length > 22050
+          && Array.from(r.samples.subarray(0, 2000)).every(Number.isFinite),
+        n: r.samples.length,
+        ms: r.elapsedMs,
+      };
+    }
+    const ok = Object.values(results).every(x => x.ok);
+    window.__testResult = { ok, results };
+    statusEl.textContent = ok
+      ? Object.entries(results).map(([k, x]) => `${k}: ${x.n} samples (${x.ms.toFixed(0)}ms)`).join(' · ')
+      : `FAIL — see window.__testResult`;
+
+    try { playAudio(await tts.synthesize('Ujian.', { voice: 'angellyn', voiceBase: '../' })); }
+    catch (e) { /* autoplay policies vary; ignored by design */ }
+  }
+
+  run().catch((e) => {
+    window.__testResult = { ok: false, error: String(e && e.stack || e) };
+    statusEl.textContent = 'ERROR — ' + (e && e.message || e);
+  });
+</script>
+</body>
+</html>
