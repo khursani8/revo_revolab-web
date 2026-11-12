@@ -1,3 +1,5 @@
+> **Unique:** Browser-native Malay TTS npm package: on-device WebAssembly synthesis (espeak-ng phonemizer plus distilled 1.39M-parameter voices), works offline after load, zero runtime dependencies.
+
 # revolab-web
 
 Browser-native neural Malay text-to-speech — WebAssembly, no server, no
